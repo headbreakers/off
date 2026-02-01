@@ -1,55 +1,222 @@
+/* =============== Base =============== */
+:root {
+  --red: #e10600;
+  --red-2: #ff1c1c;
+  --bg: #000;
+  --panel: rgba(10, 10, 10, 0.82);
+  --text: #fff;
+}
+
+* { box-sizing: border-box; }
+
 body {
   margin: 0;
   font-family: Arial, Helvetica, sans-serif;
-  background: linear-gradient(120deg, #111, #333);
-  color: white;
+  background: var(--bg);
+  color: var(--text);
   height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  overflow: hidden;
 }
 
+/* Centre la scène */
+.stage {
+  height: 100vh;
+  display: grid;
+  place-items: center;
+  gap: 26px;
+  position: relative;
+}
+
+/* Un petit “halo” de lumière quand la lampe est allumée */
+.stage::before {
+  content: "";
+  position: absolute;
+  inset: -40%;
+  background: radial-gradient(circle at 50% 35%, rgba(255,255,255,0.08), rgba(0,0,0,0) 45%);
+  opacity: 0;
+  transition: opacity 450ms ease;
+  pointer-events: none;
+}
+
+html.lamp-on .stage::before { opacity: 1; }
+
+/* Accessibilité */
+.sr-only {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* =============== Lampe =============== */
+.lamp {
+  background: transparent;
+  border: 0;
+  color: white;
+  cursor: pointer;
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+  user-select: none;
+  padding: 10px 14px;
+  border-radius: 14px;
+  transition: transform 200ms ease, filter 200ms ease, background 200ms ease;
+}
+
+.lamp:hover {
+  transform: translateY(-2px);
+  background: rgba(255,255,255,0.04);
+}
+
+.lamp__wire {
+  width: 3px;
+  height: 90px;
+  background: rgba(255,255,255,0.18);
+  border-radius: 99px;
+}
+
+.lamp__bulb {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, rgba(255,255,255,0.20), rgba(255,255,255,0.05));
+  border: 1px solid rgba(255,255,255,0.10);
+  box-shadow: 0 0 0 rgba(255,255,255,0);
+  transition: box-shadow 450ms ease, background 450ms ease, transform 450ms ease;
+}
+
+.lamp__hint {
+  font-size: 13px;
+  opacity: 0.75;
+  letter-spacing: 0.2px;
+}
+
+/* Lampe ON = bulbe lumineux */
+html.lamp-on .lamp__bulb {
+  background: radial-gradient(circle at 35% 35%, rgba(255,255,255,0.95), rgba(255,255,255,0.25));
+  box-shadow:
+    0 0 18px rgba(255,255,255,0.35),
+    0 0 60px rgba(255,255,255,0.18);
+  transform: scale(1.02);
+}
+
+/* =============== Connexion (cachée au départ) =============== */
+.login-wrap {
+  opacity: 0;
+  transform: translateY(14px) scale(0.98);
+  pointer-events: none;
+  transition: opacity 380ms ease, transform 380ms ease;
+}
+
+html.lamp-on .login-wrap {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+/* Rectangle “amélioré” + LED rouge */
 .login-box {
-  background: #000000cc;
-  padding: 40px;
-  border-radius: 12px;
-  width: 320px;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
-  text-align: center;
+  width: min(360px, 90vw);
+  padding: 34px 28px;
+  border-radius: 18px;
+  background: var(--panel);
+  backdrop-filter: blur(8px);
+  border: 2px solid rgba(225, 6, 0, 0.55);
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.06) inset,
+    0 0 18px rgba(225, 6, 0, 0.22),
+    0 0 55px rgba(225, 6, 0, 0.16);
+  transition: transform 200ms ease, box-shadow 200ms ease, border-color 200ms ease;
+  position: relative;
+}
+
+/* Effet LED qui “respire” quand lampe ON */
+html.lamp-on .login-box {
+  animation: ledPulse 2.2s ease-in-out infinite;
+}
+
+@keyframes ledPulse {
+  0%, 100% {
+    box-shadow:
+      0 0 0 1px rgba(255,255,255,0.06) inset,
+      0 0 18px rgba(225, 6, 0, 0.22),
+      0 0 55px rgba(225, 6, 0, 0.16);
+  }
+  50% {
+    box-shadow:
+      0 0 0 1px rgba(255,255,255,0.06) inset,
+      0 0 26px rgba(255, 28, 28, 0.30),
+      0 0 80px rgba(255, 28, 28, 0.20);
+  }
+}
+
+/* Hover curseur sur la box */
+.login-box:hover {
+  transform: translateY(-3px) scale(1.01);
+  border-color: rgba(255, 28, 28, 0.75);
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.07) inset,
+    0 0 28px rgba(255, 28, 28, 0.35),
+    0 0 90px rgba(255, 28, 28, 0.22);
 }
 
 h1 {
-  margin-bottom: 20px;
-  font-size: 24px;
+  margin: 0 0 18px;
+  font-size: 22px;
+  letter-spacing: 0.3px;
 }
 
+/* Inputs */
 input {
   width: 100%;
-  padding: 10px;
+  padding: 12px 12px;
   margin: 10px 0;
-  border: none;
-  border-radius: 6px;
-  font-size: 16px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.10);
+  background: rgba(0,0,0,0.35);
+  color: white;
+  outline: none;
+  font-size: 15px;
+  transition: border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
 }
 
-button {
+input:focus {
+  border-color: rgba(255, 28, 28, 0.70);
+  box-shadow: 0 0 0 4px rgba(255, 28, 28, 0.16);
+  transform: translateY(-1px);
+}
+
+/* Bouton connexion */
+.login-btn {
   width: 100%;
   padding: 12px;
-  margin-top: 15px;
-  background: #e10600;
+  margin-top: 14px;
+  background: var(--red);
   border: none;
-  border-radius: 6px;
+  border-radius: 12px;
   color: white;
-  font-size: 16px;
+  font-size: 15px;
   cursor: pointer;
+  transition: transform 160ms ease, filter 160ms ease, box-shadow 160ms ease, background 160ms ease;
+  box-shadow: 0 10px 22px rgba(225, 6, 0, 0.18);
 }
 
-button:hover {
-  background: #ff1c1c;
+.login-btn:hover {
+  background: var(--red-2);
+  transform: translateY(-2px);
+  box-shadow: 0 14px 28px rgba(255, 28, 28, 0.22);
+}
+
+.login-btn:active {
+  transform: translateY(0px) scale(0.99);
+  filter: brightness(0.95);
 }
 
 .footer {
-  margin-top: 15px;
+  margin-top: 14px;
   font-size: 12px;
   opacity: 0.7;
 }
