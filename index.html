@@ -7,27 +7,66 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <div class="login-box">
-    <h1>Connexion Motard</h1>
-    <input type="text" id="pseudo" placeholder="Pseudo" />
-    <input type="password" id="password" placeholder="Mot de passe" />
-    <button onclick="login()">Se connecter</button>
-    <div class="footer">Groupe motard – privé</div>
-  </div>
+  <main class="stage">
+    <!-- Lampe / interrupteur -->
+    <button class="lamp" id="lampBtn" type="button" aria-pressed="false" aria-label="Allumer la lampe">
+      <span class="lamp__wire" aria-hidden="true"></span>
+      <span class="lamp__bulb" aria-hidden="true"></span>
+      <span class="lamp__hint">Allume la lampe</span>
+    </button>
+
+    <!-- Connexion (cachée au début) -->
+    <section class="login-wrap" id="loginWrap" aria-hidden="true">
+      <div class="login-box" id="loginBox">
+        <h1>Connexion Motard</h1>
+        <label class="sr-only" for="pseudo">Pseudo</label>
+        <input type="text" id="pseudo" placeholder="Pseudo" autocomplete="username" />
+
+        <label class="sr-only" for="password">Mot de passe</label>
+        <input type="password" id="password" placeholder="Mot de passe" autocomplete="current-password" />
+
+        <button class="login-btn" type="button" id="loginBtn">Se connecter</button>
+        <div class="footer">Groupe motard – privé</div>
+      </div>
+    </section>
+  </main>
 
   <script>
-    function login() {
-      const pseudo = document.getElementById('pseudo').value;
+    const lampBtn = document.getElementById('lampBtn');
+    const loginWrap = document.getElementById('loginWrap');
+    const loginBtn = document.getElementById('loginBtn');
+
+    function setLamp(on) {
+      document.documentElement.classList.toggle('lamp-on', on);
+      lampBtn.setAttribute('aria-pressed', String(on));
+      loginWrap.setAttribute('aria-hidden', String(!on));
+
+      if (on) {
+        // petit délai pour laisser l'anim se lancer, puis focus
+        setTimeout(() => document.getElementById('pseudo').focus(), 250);
+      }
+    }
+
+    lampBtn.addEventListener('click', () => {
+      const isOn = document.documentElement.classList.contains('lamp-on');
+      setLamp(!isOn);
+    });
+
+    loginBtn.addEventListener('click', () => {
+      const pseudo = document.getElementById('pseudo').value.trim();
       const password = document.getElementById('password').value;
 
-      if (pseudo === '' || password === '') {
+      if (!pseudo || !password) {
         alert('Remplis le pseudo et le mot de passe.');
         return;
       }
 
       // TODO: Ici tu brancheras une vraie auth (serveur / API).
       alert(`Bienvenue ${pseudo} !`);
-    }
+    });
+
+    // Par défaut: éteint
+    setLamp(false);
   </script>
 </body>
 </html>
