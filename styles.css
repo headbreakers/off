@@ -51,57 +51,129 @@ html.lamp-on .stage::before { opacity: 1; }
   border: 0;
 }
 
-/* =============== Lampe =============== */
+/* =============== Lampe suspendue + corde =============== */
 .lamp {
-  background: transparent;
-  border: 0;
-  color: white;
-  cursor: pointer;
+  position: relative;
+  width: 260px;
+  height: 220px;
   display: grid;
-  justify-items: center;
-  gap: 10px;
-  user-select: none;
-  padding: 10px 14px;
-  border-radius: 14px;
-  transition: transform 200ms ease, filter 200ms ease, background 200ms ease;
+  place-items: start center;
+  pointer-events: none; /* la lampe elle-même n'est pas cliquable */
 }
 
-.lamp:hover {
-  transform: translateY(-2px);
+/* petit support plafond */
+.lamp__ceiling {
+  width: 70px;
+  height: 14px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.12);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.7);
+}
+
+/* câble principal */
+.lamp__cable {
+  width: 3px;
+  height: 70px;
+  margin-top: 2px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.18);
+}
+
+/* abat-jour */
+.lamp__shade {
+  width: 140px;
+  height: 70px;
+  margin-top: -2px;
+  border-radius: 18px 18px 28px 28px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.10);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.65);
+}
+
+/* ampoule */
+.lamp__bulb {
+  width: 26px;
+  height: 26px;
+  margin-top: -14px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.14);
+  box-shadow: 0 0 0 rgba(255,255,255,0);
+  transition: box-shadow 450ms ease, background 450ms ease;
+}
+
+/* Corde cliquable */
+.lamp__pull {
+  pointer-events: auto; /* SEULE la corde est cliquable */
+  position: absolute;
+  left: 50%;
+  top: 110px;
+  transform: translateX(70px);
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  padding: 6px 10px;
+  border-radius: 14px;
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  color: white;
+  user-select: none;
+  transition: transform 160ms ease, background 160ms ease;
+}
+
+.lamp__pull:hover {
+  transform: translateX(70px) translateY(1px);
   background: rgba(255,255,255,0.04);
 }
 
-.lamp__wire {
+.lamp__pull:active {
+  transform: translateX(70px) translateY(7px);
+}
+
+/* corde */
+.lamp__rope {
   width: 3px;
-  height: 90px;
-  background: rgba(255,255,255,0.18);
-  border-radius: 99px;
+  height: 86px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.20);
 }
 
-.lamp__bulb {
-  width: 64px;
-  height: 64px;
-  border-radius: 50%;
-  background: radial-gradient(circle at 35% 35%, rgba(255,255,255,0.20), rgba(255,255,255,0.05));
-  border: 1px solid rgba(255,255,255,0.10);
-  box-shadow: 0 0 0 rgba(255,255,255,0);
-  transition: box-shadow 450ms ease, background 450ms ease, transform 450ms ease;
+/* poignée */
+.lamp__handle {
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.10);
+  border: 1px solid rgba(255,255,255,0.16);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.55);
 }
 
+/* texte */
 .lamp__hint {
-  font-size: 13px;
+  font-size: 12px;
   opacity: 0.75;
-  letter-spacing: 0.2px;
 }
 
-/* Lampe ON = bulbe lumineux */
+/* Lampe ON = ampoule lumineuse */
 html.lamp-on .lamp__bulb {
-  background: radial-gradient(circle at 35% 35%, rgba(255,255,255,0.95), rgba(255,255,255,0.25));
+  background: rgba(255,255,255,0.9);
   box-shadow:
     0 0 18px rgba(255,255,255,0.35),
     0 0 60px rgba(255,255,255,0.18);
-  transform: scale(1.02);
 }
+
+/* Petite oscillation quand c'est allumé */
+html.lamp-on .lamp__shade {
+  animation: lampSway 2.8s ease-in-out infinite;
+  transform-origin: 50% -40px;
+}
+
+@keyframes lampSway {
+  0%, 100% { transform: rotate(-1.2deg); }
+  50% { transform: rotate(1.2deg); }
+}
+
 
 /* =============== Connexion (cachée au départ) =============== */
 .login-wrap {
