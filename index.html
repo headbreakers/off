@@ -8,12 +8,20 @@
 </head>
 <body>
   <main class="stage">
-    <!-- Lampe / interrupteur -->
-    <button class="lamp" id="lampBtn" type="button" aria-pressed="false" aria-label="Allumer la lampe">
-      <span class="lamp__wire" aria-hidden="true"></span>
-      <span class="lamp__bulb" aria-hidden="true"></span>
-      <span class="lamp__hint">Allume la lampe</span>
-    </button>
+    <!-- Lampe avec corde (interrupteur) -->
+    <div class="lamp" aria-hidden="false">
+      <div class="lamp__ceiling" aria-hidden="true"></div>
+      <div class="lamp__cable" aria-hidden="true"></div>
+      <div class="lamp__shade" aria-hidden="true"></div>
+      <div class="lamp__bulb" aria-hidden="true"></div>
+
+      <!-- Corde cliquable -->
+      <button class="lamp__pull" id="lampBtn" type="button" aria-pressed="false" aria-label="Tirer sur la corde pour allumer">
+        <span class="lamp__rope" aria-hidden="true"></span>
+        <span class="lamp__handle" aria-hidden="true"></span>
+        <span class="lamp__hint">Tire la corde</span>
+      </button>
+    </div>
 
     <!-- Connexion (cachée au début) -->
     <section class="login-wrap" id="loginWrap" aria-hidden="true">
