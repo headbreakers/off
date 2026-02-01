@@ -8,32 +8,37 @@
 </head>
 <body>
   <main class="stage">
-    <!-- Lampe avec corde (interrupteur) -->
-    <div class="lamp" aria-hidden="false">
-      <div class="lamp__ceiling" aria-hidden="true"></div>
-      <div class="lamp__cable" aria-hidden="true"></div>
-      <div class="lamp__shade" aria-hidden="true"></div>
-      <div class="lamp__bulb" aria-hidden="true"></div>
+    <!-- Lampe sur pied + tirette -->
+    <section class="lamp-area" aria-label="Lampe">
+      <button class="lamp" id="lampBtn" type="button" aria-pressed="false" aria-label="Allumer / éteindre la lampe">
+        <span class="lamp__shade" aria-hidden="true"></span>
+        <span class="lamp__stem" aria-hidden="true"></span>
+        <span class="lamp__base" aria-hidden="true"></span>
 
-      <!-- Corde cliquable -->
-      <button class="lamp__pull" id="lampBtn" type="button" aria-pressed="false" aria-label="Tirer sur la corde pour allumer">
-        <span class="lamp__rope" aria-hidden="true"></span>
-        <span class="lamp__handle" aria-hidden="true"></span>
+        <!-- Corde / chaînette -->
+        <span class="lamp__chain" aria-hidden="true"></span>
+        <span class="lamp__knob" aria-hidden="true"></span>
+
         <span class="lamp__hint">Tire la corde</span>
       </button>
-    </div>
+    </section>
 
     <!-- Connexion (cachée au début) -->
     <section class="login-wrap" id="loginWrap" aria-hidden="true">
       <div class="login-box" id="loginBox">
-        <h1>Connexion Motard</h1>
-        <label class="sr-only" for="pseudo">Pseudo</label>
-        <input type="text" id="pseudo" placeholder="Pseudo" autocomplete="username" />
+        <h1>Welcome</h1>
 
-        <label class="sr-only" for="password">Mot de passe</label>
-        <input type="password" id="password" placeholder="Mot de passe" autocomplete="current-password" />
+        <label class="field">
+          <span class="field__label">Username</span>
+          <input type="text" id="pseudo" placeholder="Pseudo" autocomplete="username" />
+        </label>
 
-        <button class="login-btn" type="button" id="loginBtn">Se connecter</button>
+        <label class="field">
+          <span class="field__label">Password</span>
+          <input type="password" id="password" placeholder="Mot de passe" autocomplete="current-password" />
+        </label>
+
+        <button class="login-btn" type="button" id="loginBtn">Sign In</button>
         <div class="footer">Groupe motard – privé</div>
       </div>
     </section>
@@ -49,12 +54,10 @@
       lampBtn.setAttribute('aria-pressed', String(on));
       loginWrap.setAttribute('aria-hidden', String(!on));
 
-      if (on) {
-        // petit délai pour laisser l'anim se lancer, puis focus
-        setTimeout(() => document.getElementById('pseudo').focus(), 250);
-      }
+      if (on) setTimeout(() => document.getElementById('pseudo').focus(), 220);
     }
 
+    // Clic sur la lampe (et donc la tirette)
     lampBtn.addEventListener('click', () => {
       const isOn = document.documentElement.classList.contains('lamp-on');
       setLamp(!isOn);
@@ -69,7 +72,7 @@
         return;
       }
 
-      // TODO: Ici tu brancheras une vraie auth (serveur / API).
+      // TODO: brancher une vraie auth (serveur / API)
       alert(`Bienvenue ${pseudo} !`);
     });
 
